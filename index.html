@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Card Generator</title>
+    <style>
+        #card {
+            position: relative;
+            width: 400px;
+            height: 250px;
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
+        #card img {
+            width: 100%;
+            height: 100%;
+        }
+        .details {
+            position: absolute;
+            font-size: 18px;
+            color: #000;
+        }
+        #name1 {
+            top: 89px;
+            left: 132px;
+            font-size: 13px;
+        }
+        #name2 {
+            top: 70px;
+            left: 132px;
+            font-size: 13px;
+        }
+        #name3 {
+            top: 111px;
+            left: 214px;
+            font-size: 13px;
+        }
+        #name4 {
+            top: 130px;
+            left: 132px;
+            font-size: 13px;
+        }
+        #idNumber {
+            top: 181px;
+            left: 104px;
+            font-size: 25px;
+        }
+
+        /* Photo container with a fixed size for the user image */
+        #photoContainer {
+            position: absolute;
+            top: 70px;
+            right: 285px;
+            width: 91px;
+            height: 99px;
+            border: 1px solid #000;
+            overflow: hidden;
+        }
+
+        /* Photo inside the container */
+        #photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }        
+
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<marquee behavior="" direction="">
+<h1>Aadhaar Card Generator</h1></marquee>
+
+<!-- Form for user details -->
+<form id="userForm">
+    <label for="nameInput1">Name (In English): </label>
+    <input type="text" id="nameInput1" required><br><br>
+    
+    <label for="nameInput2">Name (हिंदी में): </label>
+    <input type="text" id="nameInput2" required><br><br>
+    
+    <label for="nameInput3">DOB (dd/mm/yyyy): </label>
+    <input type="text" id="nameInput3" required><br><br>
+
+    <label for="nameInput4">Gender (हिंदी/English): </label>
+    <input type="text" id="nameInput4" required><br><br>
+    
+    <label for="idInput">Aadhaar card Number: </label>
+    <input type="text" id="idInput" required><br><br>
+    
+    <label for="photoUpload">Upload Photo: </label>
+    <input type="file" id="photoUpload" accept="image/*"><br><br>
+
+    <button type="button" onclick="generateCard()">Generate Card</button><br><br>
+    <a href="sat.html">Creat Back Side Aadhaar Card</a>
+</form>
+
+<!-- ID card display -->
+<div id="card">
+    <img id="template" src="s.jpg" alt="ID Card Template">
+    <div id="name1" class="details"></div>
+    <div id="name2" class="details"></div>
+    <div id="name3" class="details"></div>
+    <div id="name4" class="details"></div>
+   <b><div id="idNumber" class="details"></div></b>
+    <div id="photoContainer">
+        <img id="photo" src="" alt="User Photo">
+    </div>
+</div>
+
+<!-- Download button -->
+<button id="downloadBtn" style="display:none" onclick="downloadCard()">Download Card</button>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@0.5.0-alpha.2/dist/html2canvas.min.js"></script>
+
+<script>
+function generateCard() {
+    const name1 = document.getElementById('nameInput1').value;
+    const name2 = document.getElementById('nameInput2').value;
+    const name3 = document.getElementById('nameInput3').value;
+    const name4 = document.getElementById('nameInput4').value;
+    const idNumber = document.getElementById('idInput').value;
+    
+    const photoFile = document.getElementById('photoUpload').files[0];
+
+    // Set names and ID
+    document.getElementById('name1').innerText = name1;
+    document.getElementById('name2').innerText = name2;
+    document.getElementById('name3').innerText = name3;
+    document.getElementById('name4').innerText = name4;
+    document.getElementById('idNumber').innerText = idNumber;
+
+    // Handle photo upload
+    if (photoFile) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('photo').src = e.target.result;
+        }
+        reader.readAsDataURL(photoFile);
+    }
+
+    // Display download button
+    document.getElementById('downloadBtn').style.display = 'block';
+}
+
+function downloadCard() {
+    html2canvas(document.getElementById('card')).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'id_card.png';
+        link.click();
+    });
+}
+</script>
+
+</body>
+</html>
